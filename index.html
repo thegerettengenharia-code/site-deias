@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARCA — Fotos e vídeos com IA</title>
+<meta name="description" content="Gere fotos e vídeos com os melhores modelos de IA. Fotos grátis sem cadastro, vídeos com sua chave OpenRouter.">
+<meta name="theme-color" content="#0a0b0d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23c6ff3f'/%3E%3Cpath d='M14 46c10-6 26-6 36 0' stroke='%230a0b0d' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="ARCA — início">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">ARCA</span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Navegação principal">
+      <a href="#modelos">Modelos</a>
+      <a href="#gerador">Gerador</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#perguntas">Perguntas</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="#gerador">Gerar agora</a>
+      <button class="nav-burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker"><span class="dot"></span>Fotos grátis · Vídeos com sua chave OpenRouter</p>
+        <h1 class="hero-title">Crie o que imaginar.<br><em>Fotos e vídeos por IA.</em></h1>
+        <p class="hero-sub">Escolha entre os modelos de imagem e vídeo mais avançados e descreva a cena. Fotos grátis, sem cadastro, sem limites.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary btn-lg" href="#gerador">Gerar agora</a>
+          <a class="btn btn-ghost btn-lg" href="#modelos">Ver os modelos</a>
+        </div>
+      </div>
+
+      <div class="hero-gen" role="img" aria-label="Prévia do gerador de imagens por IA">
+        <div class="gen-bar">
+          <span class="console-dots"><i></i><i></i><i></i></span>
+          <span class="console-title">arca://gerador</span>
+          <span class="console-live"><i></i>ao vivo</span>
+        </div>
+        <div class="gen-preview">
+          <div class="gen-shimmer" aria-hidden="true"></div>
+          <img id="heroImg" alt="Imagem gerada por IA" loading="lazy">
+        </div>
+        <div class="gen-promptbar"><span class="caret"></span><span id="heroPrompt"></span></div>
+        <div class="gen-tags"><span>flux</span><span>zimage</span><span>nano banana</span><span>veo 3.1</span><span>sora 2</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <section class="marquee" aria-label="Modelos disponíveis">
+    <div class="marquee-track" id="marqueeTrack">
+      <span class="marquee-item"><i style="background:#a855f7"></i>FLUX</span>
+      <span class="marquee-item"><i style="background:#f87171"></i>Z-Image</span>
+      <span class="marquee-item"><i style="background:#10a37f"></i>GPT-5 Image</span>
+      <span class="marquee-item"><i style="background:#4b8bf5"></i>Nano Banana</span>
+      <span class="marquee-item"><i style="background:#7c3aed"></i>FLUX.2 Klein</span>
+      <span class="marquee-item"><i style="background:#22d3ee"></i>Seedream</span>
+      <span class="marquee-item"><i style="background:#4b8bf5"></i>Veo 3.1</span>
+      <span class="marquee-item"><i style="background:#10a37f"></i>Sora 2</span>
+      <span class="marquee-item"><i style="background:#38bdf8"></i>Kling v3</span>
+      <span class="marquee-item"><i style="background:#f97316"></i>Hailuo</span>
+      <span class="marquee-item"><i style="background:#2f7cff"></i>Wan 2.7</span>
+      <span class="marquee-item"><i style="background:#c6ff3f"></i>Seedance</span>
+    </div>
+  </section>
+
+  <!-- ============ MODELOS ============ -->
+  <section class="section" id="modelos">
+    <div class="container">
+      <div class="section-head">
+        <h2>Escolha a lente.</h2>
+        <p>Modelos de imagem e vídeo, cada um com estilo e força próprios. Fotos grátis funcionam de imediato.</p>
+      </div>
+      <div class="model-grid" id="modelGrid"></div>
+      <p class="model-more">Modelos marcados <span class="tag-free">GRÁTIS</span> funcionam sem gastar nada. <span class="tag-premium">PREMIUM</span> e vídeos usam créditos do OpenRouter — se faltar crédito, o site tenta <em>FLUX</em> automaticamente.</p>
+    </div>
+  </section>
+
+  <!-- ============ GERADOR ============ -->
+  <section class="section gen-section" id="gerador">
+    <div class="container">
+      <div class="section-head">
+        <h2>O gerador.</h2>
+        <p>Descreva a cena, escolha foto ou vídeo e gere. Sua galeria fica salva no navegador.</p>
+      </div>
+
+      <div class="gen-shell">
+        <aside class="gen-side">
+          <div class="gen-side-top">
+            <input type="search" id="modelSearch" class="input" placeholder="Buscar modelo..." aria-label="Buscar modelo">
+          </div>
+          <div class="gen-model-list" id="genModelList"></div>
+          <div class="gen-side-foot">
+            <div class="key-status" id="keyStatus"><i></i><span>Chave ativa</span></div>
+            <button class="btn btn-ghost btn-sm" id="openSettings">Chave OpenRouter</button>
+          </div>
+        </aside>
+
+        <div class="gen-main">
+          <header class="gen-head">
+            <div class="gen-head-model">
+              <span class="avatar" id="headAvatar" style="--c:#a855f7">F</span>
+              <div>
+                <strong id="headName">FLUX</strong>
+                <span class="gen-head-meta"><i class="status-dot"></i><span id="headProvider">Foto · grátis</span></span>
+              </div>
+            </div>
+            <div class="gen-head-tools">
+              <div class="mode-switch" role="tablist" aria-label="Tipo de geração">
+                <button class="mode-btn is-active" data-mode="foto" role="tab" aria-selected="true">Foto</button>
+                <button class="mode-btn" data-mode="video" role="tab" aria-selected="false">Vídeo</button>
+              </div>
+              <button class="icon-btn" id="clearGallery" aria-label="Limpar galeria" title="Limpar galeria">✕</button>
+            </div>
+          </header>
+
+          <div class="gen-body" id="genBody" aria-live="polite"></div>
+
+          <footer class="gen-input">
+            <form id="genForm" autocomplete="off">
+              <textarea id="promptInput" rows="2" placeholder="Descreva a cena que você quer criar. Ex.: um dragão de origami voando sobre templos japoneses ao pôr do sol"></textarea>
+              <div class="gen-opts">
+                <select id="aspect" class="input select" aria-label="Proporção">
+                  <option value="1024x1024">1:1</option>
+                  <option value="1280x720">16:9</option>
+                  <option value="720x1280">9:16</option>
+                  <option value="1024x768">4:3</option>
+                  <option value="768x1024">3:4</option>
+                </select>
+                <select id="duration" class="input select" aria-label="Duração" hidden>
+                  <option value="5">5s</option>
+                  <option value="8">8s</option>
+                  <option value="10">10s</option>
+                </select>
+                <button type="submit" class="btn btn-primary send-btn" id="sendBtn">Gerar <span class="send-arrow">✦</span></button>
+              </div>
+            </form>
+            <p class="gen-hint" id="genHint"></p>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RECURSOS ============ -->
+  <section class="section" id="recursos">
+    <div class="container">
+      <div class="section-head">
+        <h2>Feito para criar sem limites.</h2>
+      </div>
+      <div class="bento">
+        <div class="bento-cell bento-main">
+          <h3>Uma cena, doze visões</h3>
+          <p>Cada modelo enxerga seu prompt de um jeito. Troque de lente e veja a mesma ideia nascer diferente.</p>
+          <div class="bento-dots" aria-hidden="true">
+            <i style="--c:#a855f7"></i><i style="--c:#f87171"></i><i style="--c:#10a37f"></i><i style="--c:#4b8bf5"></i><i style="--c:#7c3aed"></i><i style="--c:#22d3ee"></i><i style="--c:#38bdf8"></i><i style="--c:#c6ff3f"></i>
+          </div>
+        </div>
+        <div class="bento-cell bento-accent">
+          <span class="bento-tag mono">R$ 0</span>
+          <h3>Fotos grátis</h3>
+          <p>FLUX e Z-Image geram sem custo, sem precisar de chave.</p>
+        </div>
+        <div class="bento-cell">
+          <h3>Sem cadastro</h3>
+          <p>Abra a página e gere. Fotos grátis não pedem cadastro nem chave.</p>
+        </div>
+        <div class="bento-cell bento-media">
+          <h3>Foto + Vídeo</h3>
+          <p>Gere os dois no mesmo lugar. Vídeos usam sua chave OpenRouter (créditos).</p>
+          <div class="bento-img" aria-hidden="true"></div>
+        </div>
+        <div class="bento-cell">
+          <h3>Download direto</h3>
+          <p>Imagens e vídeos com botão de baixar e abrir. Sua galeria fica no navegador.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMO FUNCIONA ============ -->
+  <section class="section how" id="como">
+    <div class="container">
+      <div class="section-head">
+        <h2>Três passos e pronto.</h2>
+      </div>
+      <ol class="steps">
+        <li><span class="step-num mono">01</span><h3>Escolha o modelo</h3><p>Foto ou vídeo — cada um com estética, velocidade e custo próprios.</p></li>
+        <li><span class="step-num mono">02</span><h3>Descreva a cena</h3><p>Quanto mais detalhe, melhor: luz, ângulo, clima, estilo, referências.</p></li>
+        <li><span class="step-num mono">03</span><h3>Gere e baixe</h3><p>A imagem nasce em segundos; o vídeo, em até um minuto. Tudo pronto para salvar.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section faq" id="perguntas">
+    <div class="container faq-wrap">
+      <div class="section-head">
+        <h2>Perguntas frequentes.</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item" open>
+          <summary>É mesmo grátis?<span class="faq-icon" aria-hidden="true"></span></summary>
+          <div class="faq-body"><p>As <strong>fotos</strong> com os modelos marcados <span class="tag-free">GRÁTIS</span> (FLUX e Z-Image) funcionam sem gastar nada, sem chave. Modelos <span class="tag-premium">PREMIUM</span> e vídeos usam uma chave OpenRouter com créditos.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Preciso cadastrar ou pagar para começar?<span class="faq-icon" aria-hidden="true"></span></summary>
+          <div class="faq-body"><p>Não. As fotos grátis funcionam de imediato, sem cadastro e sem chave. Para desbloquear modelos premium e vídeos, cole sua chave no painel <em>Chave OpenRouter</em> e adicione créditos na sua conta em <a href="https://openrouter.ai/settings/credits" target="_blank" rel="noopener">openrouter.ai/settings/credits</a>.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Onde está minha chave?<span class="faq-icon" aria-hidden="true"></span></summary>
+          <div class="faq-body"><p>No botão <em>Chave OpenRouter</em>, dentro do gerador. A chave fica salva apenas no seu navegador (localStorage) e você pode trocá-la pela sua a qualquer momento.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Posso usar as imagens comercialmente?<span class="faq-icon" aria-hidden="true"></span></summary>
+          <div class="faq-body"><p>Em geral sim. Confira a licença de cada modelo na página dele no <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a>. As geradas pelos modelos grátis (FLUX, Z-Image) são livres para uso.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Quais modelos estão disponíveis?<span class="faq-icon" aria-hidden="true"></span></summary>
+          <div class="faq-body"><p><strong>Fotos grátis:</strong> FLUX e Z-Image. <strong>Fotos premium:</strong> GPT-5 Image, GPT-5.4 Image 2, Nano Banana, FLUX.2 Klein, Seedream e mais. <strong>Vídeos:</strong> Veo 3.1, Sora 2, Kling v3, Hailuo, Seedance, Wan 2.7 e Gen-4.5.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Como escolher o melhor modelo?<span class="faq-icon" aria-hidden="true"></span></summary>
+          <div class="faq-body"><p>Para fotos rápidas e grátis: FLUX e Z-Image. Para máxima qualidade: GPT-5 Image e Nano Banana. Para vídeo: Veo 3.1 e Sora 2. Quando faltar crédito, o site cai automaticamente para FLUX.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a class="brand" href="#top" aria-label="ARCA">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">ARCA</span>
+      </a>
+      <p>Feito para explorar o potencial total da IA. Fotos e vídeos gerados via OpenRouter.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do rodapé">
+      <a href="#modelos">Modelos</a>
+      <a href="#gerador">Gerador</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#perguntas">Perguntas</a>
+    </nav>
+    <p class="footer-note mono">© 2026 ARCA · sem limites</p>
+  </div>
+</footer>
+
+<!-- ============ SETTINGS PANEL ============ -->
+<div class="settings" id="settings" hidden>
+  <div class="settings-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="settings-head">
+      <h3 id="settingsTitle">Chave OpenRouter</h3>
+      <button class="icon-btn" id="closeSettings" aria-label="Fechar">✕</button>
+    </div>
+    <p class="settings-text">Cole sua chave do <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a> para destravar modelos premium e vídeos. A chave fica salva apenas no seu navegador (localStorage). Fotos grátis (FLUX, Z-Image) funcionam sem chave.</p>
+    <label class="field">
+      <span>Chave de API</span>
+      <input type="password" id="apiKey" class="input" placeholder="sk-or-v1-..." autocomplete="off">
+    </label>
+    <div class="settings-actions">
+      <button class="btn btn-ghost" id="clearKey">Remover chave</button>
+      <button class="btn btn-primary" id="saveSettings">Salvar</button>
+    </div>
+    <p class="settings-status" id="settingsStatus"></p>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
