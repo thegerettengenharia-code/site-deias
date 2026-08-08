@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-08-08 (novo) — Envio de foto para a IA editar/criar a partir dela
+
+### Novo
+- Botão **Foto** no formulário de geração (com ícone de clipe): anexe uma imagem do dispositivo para a IA editar ou criar algo a partir dela.
+- A imagem é reduzida para no máx. 1024px e enviada como JPEG (data URL). Preview com miniatura e botão ✕ para remover.
+- Colar imagem direto no campo de prompt (Ctrl/Cmd+V) também anexa.
+- No modo vídeo o botão fica desabilitado (imagem vale só para fotos) — anexada antes da troca é preservada, com aviso na nota.
+
+### Como a imagem chega a cada API
+- **Grátis (FLUX/Z-Image, Pollinations):** parâmetro `image=` com o data URL na URL da geração.
+- **Premium (OpenRouter):** campo `input_references: [{ type: "image_url", image_url: { url } }]` no POST de `/api/v1/images` (padrão documentado para edição de imagem).
+- O fallback automático (sem créditos → FLUX) mantém a imagem anexada.
+
+### Validação (puppeteer + interceptação)
+- Preview aparece ao anexar (data URL JPEG), nota atualiza, remover limpa tudo.
+- Geração conclui com a requisição à Pollinations contendo `&image=data%3Aimage...`.
+- Modo vídeo desabilita o anexo; voltar ao modo foto reabilita.
+- Mobile (390px): sem overflow horizontal na área do gerador.
+- `node --check js/app.js` — sintaxe OK.
+
 ## 2026-08-08 (PWA) — Instalável como aplicativo
 
 - `manifest.webmanifest`: nome, ícones 192/512 (any + maskable), `display: standalone`, cores do tema.

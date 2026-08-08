@@ -56,6 +56,7 @@
   let active = getModel(state.model);
   let mode = state.mode;
   let busy = false;
+  let attached = null;
 
   /* ---------------- refs ---------------- */
   const modelGrid = $('#modelGrid');
@@ -63,6 +64,12 @@
   const genBody = $('#genBody');
   const genForm = $('#genForm');
   const promptInput = $('#promptInput');
+  const attachBtn = $('#attachBtn');
+  const imageInput = $('#imageInput');
+  const imgPreview = $('#imgPreview');
+  const imgPreviewImg = $('#imgPreviewImg');
+  const imgRemove = $('#imgRemove');
+  const attachNote = $('#attachNote');
   const sendBtn = $('#sendBtn');
   const aspectSel = $('#aspect');
   const durationSel = $('#duration');
@@ -162,6 +169,8 @@
       ? 'Descreva o vídeo que você quer. Ex.: um drone sobrevoando a Patagônia ao amanhecer'
       : 'Descreva a cena que você quer criar. Ex.: um dragão de origami sobre templos japoneses ao pôr do sol';
     durationSel.hidden = mode !== 'video';
+    attachBtn.disabled = mode === 'video';
+    if (attached && mode === 'video') attachNote.textContent = 'Imagem anexada — vale só para fotos';
     renderModelList();
     renderModelSel();
     updateHead();
@@ -270,6 +279,55 @@
     item.querySelector('.cap-tag').textContent = 'erro';
   }
 
+  /* ---------------- imagem anexada ---------------- */
+  function readImageFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 1024;
+        let w = img.naturalWidth || img.width;
+        let h = img.naturalHeight || img.height;
+        if (w > max || h > max) {
+          const scale = max / Math.max(w, h);
+          w = Math.round(w * scale);
+          h = Math.round(h * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        attached = canvas.toDataURL('image/jpeg', 0.82);
+        imgPreviewImg.src = attached;
+        imgPreview.hidden = false;
+        attachNote.textContent = mode === 'video'
+          ? 'Imagem anexada — vale só para fotos'
+          : 'Imagem anexada — a IA edita ou cria a partir dela';
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearAttach() {
+    attached = null;
+    imgPreview.hidden = true;
+    imgPreviewImg.removeAttribute('src');
+    attachNote.textContent = 'Anexe uma foto para a IA editar ou criar a partir dela';
+  }
+
+  attachBtn.addEventListener('click', () => imageInput.click());
+  imageInput.addEventListener('change', () => {
+    readImageFile(imageInput.files && imageInput.files[0]);
+    imageInput.value = '';
+  });
+  imgRemove.addEventListener('click', clearAttach);
+  promptInput.addEventListener('paste', (e) => {
+    const item = Array.from(e.clipboardData.items || []).find((i) => i.type.startsWith('image/'));
+    if (item && item.getAsFile) readImageFile(item.getAsFile());
+  });
+
   /* ---------------- geração ---------------- */
   genForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -299,8 +357,7 @@
       const code = err && err.code;
       if (code === 402 && !isVid && m.api !== FALLBACK_MODEL) {
         try {
-          const out = await generateImage(FALLBACK_MODEL, text);
-          finalizeItem(item, { url: out, modelid: 'flux', prompt: text, mode: 'foto', fallback: true });
+          const out = await generateImage(FALLBACK_MODEL, text);          finalizeItem(item, { url: out, modelid: 'flux', prompt: text, mode: 'foto', fallback: true });
         } catch (fbErr) {
           failItem(item, 'Sem créditos no OpenRouter — o fallback (FLUX) também falhou. Adicione créditos ou use um modelo grátis.');
         }
@@ -327,9 +384,10 @@
     return { width: w || 1024, height: h || 1024 };
   }
 
-  async function freeImage(model, prompt) {
+  async function freeImage(model, prompt, image) {
     const { width, height } = sizeToDim(aspectSel.value);
-    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${width}&height=${height}&seed=${Math.floor(Math.random() * 1e6)}&nologo=true&referrer=the-gerett-studio.app`;
+    let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${width}&height=${height}&seed=${Math.floor(Math.random() * 1e6)}&nologo=true&referrer=the-gerett-studio.app`;
+    if (image) url += '&image=' + encodeURIComponent(image);
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 190000);
     try {
@@ -349,10 +407,10 @@
   }
 
   async function generateImage(model, prompt) {
-    if (isFree(model)) return freeImage(model, prompt);
-    const res = await callOpenRouter(OR_IMG, {
-      model, prompt, n: 1, nologo: true, size: aspectSel.value
-    });
+    if (isFree(model)) return freeImage(model, prompt, attached);
+    const body = { model, prompt, n: 1, nologo: true, size: aspectSel.value };
+    if (attached) body.input_references = [{ type: 'image_url', image_url: { url: attached } }];
+    const res = await callOpenRouter(OR_IMG, body);
     const d = res.data && res.data[0];
     if (d && d.url) return d.url;
     if (d && d.b64_json) return 'data:image/' + (d.media_type ? d.media_type.replace('image/', '') : 'png') + ';base64,' + d.b64_json;
