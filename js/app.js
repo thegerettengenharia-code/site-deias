@@ -66,6 +66,7 @@
   const sendBtn = $('#sendBtn');
   const aspectSel = $('#aspect');
   const durationSel = $('#duration');
+  const modelSel = $('#modelSel');
   const genHint = $('#genHint');
   const keyStatus = $('#keyStatus');
   const headAvatar = $('#headAvatar');
@@ -118,6 +119,14 @@
     $$('.gen-model').forEach((b) => b.addEventListener('click', () => selectModel(b.dataset.id)));
   }
 
+  /* ---------------- render: seletor no formulário ---------------- */
+  function renderModelSel() {
+    const list = MODELS.filter((m) => isVideo(m) ? mode === 'video' : mode === 'foto');
+    modelSel.innerHTML = list.map((m) =>
+      `<option value="${m.id}">${m.name}${m.free ? '' : ' · premium'}</option>`).join('');
+    modelSel.value = active.id;
+  }
+
   /* ---------------- seleção ---------------- */
   function selectModel(id) {
     const next = getModel(id);
@@ -129,6 +138,7 @@
     store.set('arca.state', state);
     updateHead();
     renderModelList();
+    renderModelSel();
     durationSel.hidden = mode !== 'video';
     if (window.innerWidth <= 1024) $('#gerador').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -153,6 +163,7 @@
       : 'Descreva a cena que você quer criar. Ex.: um dragão de origami sobre templos japoneses ao pôr do sol';
     durationSel.hidden = mode !== 'video';
     renderModelList();
+    renderModelSel();
     updateHead();
   }
 
@@ -441,6 +452,7 @@
   });
   $('#modelSearch').addEventListener('input', renderModelList);
   $$('.mode-btn').forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
+  modelSel.addEventListener('change', () => selectModel(modelSel.value));
 
   /* ---------------- hero: imagens reais ciclando ---------------- */
   const heroPrompts = [

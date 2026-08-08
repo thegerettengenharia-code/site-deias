@@ -10,6 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23c6ff3f'/%3E%3Cpath d='M14 46c10-6 26-6 36 0' stroke='%230a0b0d' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -146,6 +148,7 @@
             <form id="genForm" autocomplete="off">
               <textarea id="promptInput" rows="2" placeholder="Descreva a cena que você quer criar. Ex.: um dragão de origami voando sobre templos japoneses ao pôr do sol"></textarea>
               <div class="gen-opts">
+                <select id="modelSel" class="input select" aria-label="Modelo" title="Modelo"></select>
                 <select id="aspect" class="input select" aria-label="Proporção">
                   <option value="1024x1024">1:1</option>
                   <option value="1280x720">16:9</option>
@@ -295,5 +298,12 @@
 </div>
 
 <script src="js/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+</script>
 </body>
 </html>

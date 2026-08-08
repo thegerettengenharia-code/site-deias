@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-08-08 (PWA) — Instalável como aplicativo
+
+- `manifest.webmanifest`: nome, ícones 192/512 (any + maskable), `display: standalone`, cores do tema.
+- `sw.js`: service worker com cache da estrutura do app (network-first + fallback offline) — o site abre mesmo sem internet após a primeira visita.
+- Ícones gerados em `icons/` (icon-180/192/512.png a partir de `icons/icon.svg`).
+- `index.html`: `link rel="manifest"`, `apple-touch-icon` (iOS) e registro do service worker.
+- `vercel.json`: headers de `Content-Type` para o manifest, `no-cache` no SW e cache imutável nos ícones.
+- Validado: SW registrado e ativado, página carrega offline.
+
+## 2026-08-08 (correção) — Seletor de modelo no gerador + correção mobile
+
+### Novo
+- Adicionado dropdown de modelo (`#modelSel`) na linha do formulário de geração (ao lado de proporção/duração e do botão **Gerar**), sincronizado com a lista lateral e os cards do catálogo. Lista só os modelos do modo ativo (foto/vídeo) e alterna junto com o modo. No mobile ocupa linha inteira.
+
+### Correção mobile (bug crítico)
+- `.gen-shell` explodia para ~1956px no mobile/tablet: a lista horizontal de modelos forçava a coluna do grid a crescer até o mínimo-conteúdo, e o `body { overflow-x: hidden }` cortava o gerador (só a fatia esquerda aparecia). Corrigido com `min-width: 0` em `.gen-side` no breakpoint ≤1024px — o gerador passa a ocupar 100% da largura e a lista de modelos rola horizontalmente de fato.
+
 ## 2026-08-08 — Overhaul responsivo + rebranding "The-Gerett-Studio"
 
 ### Rebranding

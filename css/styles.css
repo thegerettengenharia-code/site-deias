@@ -411,7 +411,7 @@ em { font-style: italic; color: var(--accent); }
   .hero-grid { grid-template-columns: 1fr; gap: 40px; }
   .hero { padding: 130px 0 60px; }
   .gen-shell { grid-template-columns: 1fr; }
-  .gen-side { border-right: 0; border-bottom: 1px solid var(--line); }
+  .gen-side { border-right: 0; border-bottom: 1px solid var(--line); min-width: 0; }
   .gen-model-list {
     flex-direction: row; overflow-x: auto; max-height: none;
     -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity;
@@ -460,6 +460,7 @@ em { font-style: italic; color: var(--accent); }
   #promptInput, .input { font-size: 16px; }
   .gen-opts { flex-wrap: wrap; gap: 8px; }
   .gen-opts .select { flex: 1 1 calc(50% - 4px); width: auto; }
+  #modelSel { flex-basis: 100%; }
   .send-btn { margin-left: 0; flex-basis: 100%; min-height: 48px; }
 
   .bento { grid-template-columns: 1fr; }
