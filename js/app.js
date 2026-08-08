@@ -1,8 +1,9 @@
 /* ============================================================
-   ARCA — gerador de fotos e vídeos via OpenRouter
+   The-Gerett-Studio — gerador de fotos e vídeos via OpenRouter
    Imagens: POST /api/v1/images  (flux/zimage grátis; premium com créditos)
    Vídeos:  POST /api/v1/videos  (assíncrono: 202 + polling_url)
    Fallback: 402 -> tenta flux automaticamente.
+   (chaves do navegador permanecem em arca.* para compatibilidade)
    ============================================================ */
 (() => {
   'use strict';
@@ -13,6 +14,7 @@
   const OR_IMG = 'https://openrouter.ai/api/v1/images';
   const OR_VID = 'https://openrouter.ai/api/v1/videos';
   const FALLBACK_MODEL = 'flux';
+  const DEFAULT_KEY = '__ARCA_OPENROUTER_KEY__';
 
   /* ---------------- modelos: fotos ---------------- */
   const PHOTO_MODELS = [
@@ -48,7 +50,7 @@
     get(k, fb) { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch { return fb; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
-  let settings = store.get('arca.settings', { key: '' });
+  let settings = store.get('arca.settings', { key: DEFAULT_KEY });
   let state = store.get('arca.state', { mode: 'foto', model: 'flux' });
   let gallery = store.get('arca.galeria', []);
   let active = getModel(state.model);
@@ -316,11 +318,11 @@
 
   async function freeImage(model, prompt) {
     const { width, height } = sizeToDim(aspectSel.value);
-    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${width}&height=${height}&seed=${Math.floor(Math.random() * 1e6)}&nologo=true&referrer=arca.app`;
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${width}&height=${height}&seed=${Math.floor(Math.random() * 1e6)}&nologo=true&referrer=the-gerett-studio.app`;
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 190000);
     try {
-      const res = await fetch(url, { signal: ctrl.signal, headers: { Referer: 'https://arca.app' } });
+      const res = await fetch(url, { signal: ctrl.signal, headers: { Referer: 'https://the-gerett-studio.app' } });
       if (!res.ok) throw { code: res.status, message: 'Pollinations: ' + res.status };
       const blob = await res.blob();
       const dataUrl = await new Promise((resolve, reject) => {
@@ -380,8 +382,8 @@
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + settings.key,
-          'HTTP-Referer': 'https://arca.app',
-          'X-Title': 'ARCA'
+          'HTTP-Referer': 'https://the-gerett-studio.app',
+          'X-Title': 'The-Gerett-Studio'
         },
         body: body ? JSON.stringify(body) : undefined,
         signal: ctrl.signal
